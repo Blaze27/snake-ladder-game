@@ -1,6 +1,8 @@
 from typing import List, Optional
 from components.player import Player
 from factory.entity_factory import EntityFactory
+from observer.game_observer import EventObserver
+from src.constants import Constants
 
 
 class GameManager:
@@ -34,6 +36,14 @@ class GameManager:
         self.__create_ladders(ladders=ladders)
         self.players = self.__create_players(players=players)
         self.dice = Dice()
+        self.observers = { Constants.EVENT_OBSERVER: EventObserver() }
+
+    def __observer_notify(self, observer_key, event_type, data):
+        observer = self.observers.get(observer_key)
+        if observer:
+            observer.notify(event_type=event_type, data=data)
+        else:
+            print("No observer key has found")
     
     def __create_players(self, players: List):
         """
@@ -84,13 +94,13 @@ class GameManager:
         
         for snake in self.board.snakes:
             if current_position == snake.start_cell:
-                print(f"{player.name} encountered a snake! Moving down to {snake.end_cell}.")
+                self.__observer_notify(Constants.EVENT_OBSERVER, Constants.SNAKE_ENCOUNTERED, data={'player_name': player.name, 'cell': snake.end_cell})
                 player.move(snake.end_cell)
                 return
         
         for ladder in self.board.ladders:
             if current_position == ladder.start_cell:
-                print(f"{player.name} encountered a ladder! Climbing up to {ladder.end_cell}.")
+                self.__observer_notify(Constants.EVENT_OBSERVER, Constants.LADDER_ENCOUNTERED, data={'player_name': player.name, 'cell': ladder.end_cell})
                 player.move(ladder.end_cell)
                 return
     
