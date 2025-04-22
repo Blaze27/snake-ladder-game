@@ -1,5 +1,6 @@
 from typing import List, Optional
 from components.player import Player
+from factory.entity_factory import EntityFactory
 
 
 class GameManager:
@@ -40,12 +41,9 @@ class GameManager:
         :param players: A list of player names.
         :return: A list of Player objects.
         """
-        
-        from components.player import Player
 
         initial_position = 0
-        
-        return [Player(name, initial_position) for name in players]
+        return [EntityFactory.create_player(name, initial_position) for name in players]
     
     def __create_snakes(self, snakes: List):
         """
@@ -54,7 +52,8 @@ class GameManager:
         """
         
         for start, end in snakes:
-            self.board.add_snake(start, end)
+            snake = EntityFactory.create_snake(start, end)
+            self.board.add_snake(snake)
     
     def __create_ladders(self, ladders: List):
         """
@@ -63,7 +62,8 @@ class GameManager:
         """
         
         for start, end in ladders:
-            self.board.add_ladder(start, end)
+            ladder = EntityFactory.create_ladder(start_cell=start, end_cell=end)
+            self.board.add_ladder(ladder)
 
     def start_game(self):
         """

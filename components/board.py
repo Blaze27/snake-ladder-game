@@ -23,25 +23,19 @@ class Board:
 
         return [Cell(i) for i in range(1, self.board_size + 1)]
 
-    def add_snake(self, start_cell, end_cell):
+    def add_snake(self, snake):
         """
         Add a snake to the board.
-        :param start_cell: The cell where the snake starts.
-        :param end_cell: The cell where the snake ends.
+        :param: snake
         """
-        from components.snake import Snake
 
-        snake = Snake(start_cell, end_cell)
         self.snakes.append(snake)
 
-    def add_ladder(self, start_cell, end_cell):
+    def add_ladder(self, ladder):
         """
         Add a ladder to the board.
-        :param start_cell: The cell where the ladder starts.
-        :param end_cell: The cell where the ladder ends.
+        :param: ladder
         """
-        from components.ladder import Ladder
 
-        ladder = Ladder(start_cell, end_cell)
         self.ladders.append(ladder)
     
